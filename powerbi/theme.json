@@ -1,0 +1,20 @@
+{
+  "name": "Bank Campaign Theme",
+  "dataColors": ["#1f3a5f", "#2a9d8f", "#e76f51", "#b8c0cc", "#f4a261", "#6c8ead", "#8ab17d", "#9b5de5"],
+  "background": "#FFFFFF",
+  "foreground": "#1f2933",
+  "tableAccent": "#1f3a5f",
+  "textClasses": {
+    "title":   { "fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#1f3a5f" },
+    "label":   { "fontFace": "Segoe UI", "fontSize": 10, "color": "#52606d" },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#1f3a5f" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [{ "show": false }],
+        "title":  [{ "show": true, "fontColor": { "solid": { "color": "#1f3a5f" } }, "fontSize": 12 }]
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+risk_tier,limit_band,customers,default_rate_pct
+A. Critical,1. Under 50k,665,70.4
+A. Critical,2. 50k-100k,784,70.4
+A. Critical,3. 100k-200k,620,68.2
+A. Critical,4. 200k-400k,356,68.8
+A. Critical,5. 400k+,60,80.0
+B. High,1. Under 50k,582,44.3
+B. High,2. 50k-100k,711,36.6
+B. High,3. 100k-200k,682,30.4
+B. High,4. 200k-400k,794,29.1
+B. High,5. 400k+,138,20.3
+C. Elevated,1. Under 50k,306,40.2
+C. Elevated,2. 50k-100k,272,38.6
+C. Elevated,3. 100k-200k,294,31.3
+C. Elevated,4. 200k-400k,215,29.8
+C. Elevated,5. 400k+,32,18.8
+D. Standard,1. Under 50k,1864,20.0
+D. Standard,2. 50k-100k,3962,14.5
+D. Standard,3. 100k-200k,4336,11.7
+D. Standard,4. 200k-400k,5893,10.5
+D. Standard,5. 400k+,1434,8.4

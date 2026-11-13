@@ -1,0 +1,66 @@
+// =====================================================================
+// measures.dax  -  Modeling > New measure.  Keep them in a table called "_Measures".
+// Tables loaded: fact_customers (+ rpt_* tables if you want ready-made views)
+// =====================================================================
+
+// ---------- Core ----------
+Customers = COUNTROWS ( fact_customers )
+Defaulters = SUM ( fact_customers[defaulted] )
+Default Rate % = DIVIDE ( [Defaulters], [Customers] )
+
+Balance Outstanding (NT$m) = DIVIDE ( SUM ( fact_customers[balance_outstanding] ), 1000000 )
+Defaulted Balance (NT$m)   = DIVIDE ( SUM ( fact_customers[defaulted_balance] ), 1000000 )
+Balance-weighted Default % = DIVIDE ( [Defaulted Balance (NT$m)], [Balance Outstanding (NT$m)] )
+Avg Credit Limit = AVERAGE ( fact_customers[limit_bal] )
+
+// ---------- Shares and lift (work in any bar / table / matrix) ----------
+Share of Customers % =
+DIVIDE ( [Customers], CALCULATE ( [Customers], ALLSELECTED ( fact_customers ) ) )
+
+Share of Defaulters % =
+DIVIDE ( [Defaulters], CALCULATE ( [Defaulters], ALLSELECTED ( fact_customers ) ) )
+
+// 1.00 = average risk. 3.00 = three times as likely to default as the average customer.
+Lift =
+DIVIDE ( [Default Rate %], CALCULATE ( [Default Rate %], ALLSELECTED ( fact_customers ) ) )
+
+// ---------- 95% Wilson interval for the default rate (use as error bars / table columns) ----------
+Default CI Low =
+VAR n = [Customers]
+VAR p = [Default Rate %]
+VAR z = 1.96
+RETURN IF ( n = 0, BLANK (),
+    ( ( p + z ^ 2 / ( 2 * n ) ) - z * SQRT ( p * ( 1 - p ) / n + z ^ 2 / ( 4 * n ^ 2 ) ) ) / ( 1 + z ^ 2 / n ) )
+
+Default CI High =
+VAR n = [Customers]
+VAR p = [Default Rate %]
+VAR z = 1.96
+RETURN IF ( n = 0, BLANK (),
+    ( ( p + z ^ 2 / ( 2 * n ) ) + z * SQRT ( p * ( 1 - p ) / n + z ^ 2 / ( 4 * n ^ 2 ) ) ) / ( 1 + z ^ 2 / n ) )
+
+// ---------- Watch-list what-if ----------
+// Modeling > New parameter > Numeric range: min 1, max 4, step 1, name "Watchlist Depth", default 3.
+// (1 = tier A only, 2 = A+B, 3 = A+B+C, 4 = everyone.)  Creates [Watchlist Depth Value].
+Customers on Watchlist =
+VAR depth = [Watchlist Depth Value]
+RETURN CALCULATE ( [Customers], FILTER ( ALL ( fact_customers ), fact_customers[risk_tier_rank] <= depth ) )
+
+Defaulters on Watchlist =
+VAR depth = [Watchlist Depth Value]
+RETURN CALCULATE ( [Defaulters], FILTER ( ALL ( fact_customers ), fact_customers[risk_tier_rank] <= depth ) )
+
+Watchlist Size % =
+DIVIDE ( [Customers on Watchlist], CALCULATE ( [Customers], ALL ( fact_customers ) ) )
+
+Defaulters Caught % =
+DIVIDE ( [Defaulters on Watchlist], CALCULATE ( [Defaulters], ALL ( fact_customers ) ) )
+
+Watchlist Precision % = DIVIDE ( [Defaulters on Watchlist], [Customers on Watchlist] )
+
+Watchlist Lift = DIVIDE ( [Defaulters Caught %], [Watchlist Size %] )
+
+// ---------- Headline text card ----------
+Headline =
+"Contacting the riskiest " & FORMAT ( [Watchlist Size %], "0%" ) & " of customers reaches "
+    & FORMAT ( [Defaulters Caught %], "0%" ) & " of those who will default."

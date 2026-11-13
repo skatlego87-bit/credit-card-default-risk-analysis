@@ -1,0 +1,9 @@
+risk_tier,sample_half,customers,default_rate_pct
+A. Critical,Half 1 (even ids),1257,70.3
+A. Critical,Half 2 (odd ids),1228,69.4
+B. High,Half 1 (even ids),1449,35.1
+B. High,Half 2 (odd ids),1458,32.6
+C. Elevated,Half 1 (even ids),540,34.6
+C. Elevated,Half 2 (odd ids),579,35.1
+D. Standard,Half 1 (even ids),8754,12.1
+D. Standard,Half 2 (odd ids),8735,13.0
