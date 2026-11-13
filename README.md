@@ -123,8 +123,6 @@ Built from the CSVs in `data/processed/`. Steps, DAX measures and page layouts a
 - `measures.dax`: all measures, including confidence intervals and a "watch-list depth" what-if
 - `theme.json`: colour theme
 
-> _Add your Power BI screenshots here, e.g. `![Early-warning page](images/powerbi_page2.png)`_
-
 ## 9. Repository layout
 ```
 data/raw/            original file, untouched
